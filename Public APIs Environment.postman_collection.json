@@ -1,0 +1,787 @@
+{
+	"info": {
+		"_postman_id": "518b16ec-1fd4-40eb-8034-c16b30814db8",
+		"name": "Public APIs Environment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12615993",
+		"_collection_link": "https://lively-space-934376.postman.co/workspace/youverify~5a9db3a6-7e89-41af-8fe1-8b1cee783cad/collection/12615993-518b16ec-1fd4-40eb-8034-c16b30814db8?action=share&source=collection_link&creator=12615993"
+	},
+	"item": [
+		{
+			"name": "post request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Verify POST request\", function () {\r",
+							"    var response = pm.response;\r",
+							"    var responseBody = response.text(); // Get the response body as text\r",
+							"\r",
+							"    // Log response body for debugging\r",
+							"    console.log(\"Response Body: \", responseBody);\r",
+							"\r",
+							"    // Check status code\r",
+							"    pm.expect(response.code).to.eql(201); // Assuming 201 Created is the expected status code for a successful POST\r",
+							"\r",
+							"    // Check Content-Type header\r",
+							"    pm.expect(response.headers.get('Content-Type')).to.include('application/json');\r",
+							"\r",
+							"    // If the content type is not JSON, handle it as an HTML response\r",
+							"    if (response.headers.get('Content-Type').includes('text/html')) {\r",
+							"        pm.test(\"Response is HTML\", function () {\r",
+							"            pm.expect(responseBody).to.include('<html>');\r",
+							"        });\r",
+							"    } else {\r",
+							"        // Parse JSON response if applicable\r",
+							"        try {\r",
+							"            var jsonResponse = JSON.parse(responseBody);\r",
+							"\r",
+							"            // Verify response structure and content\r",
+							"            pm.expect(jsonResponse).to.have.property('id');\r",
+							"            pm.expect(jsonResponse).to.have.property('name');\r",
+							"            pm.expect(jsonResponse.name).to.eql(\"Expected Name\");\r",
+							"            \r",
+							"            // Additional checks based on your API's response\r",
+							"            pm.expect(jsonResponse.value).to.eql(\"Expected Value\");\r",
+							"\r",
+							"        } catch (e) {\r",
+							"            // Handle JSON parsing error\r",
+							"            console.error(\"Failed to parse JSON response:\", e);\r",
+							"            pm.test(\"Response is not JSON\", function () {\r",
+							"                pm.expect(responseBody).to.include('<html>'); // Check if the response is HTML\r",
+							"            });\r",
+							"        }\r",
+							"    }\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Test Name\",\r\n  \"value\": \"Test Value\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/public-apis/public-apis",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"public-apis",
+						"public-apis"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Verify GET request\", function () {\r",
+							"    var response = pm.response;\r",
+							"    var responseBody = response.text();\r",
+							"\r",
+							"    // Check status code\r",
+							"    pm.expect(response.code).to.eql(200);\r",
+							"\r",
+							"    // Check Content-Type header\r",
+							"    pm.expect(response.headers.get('Content-Type')).to.include('text/html');\r",
+							"\r",
+							"    // Log response body for debugging\r",
+							"    console.log(\"Response Body: \", responseBody);\r",
+							"\r",
+							"    // Check if response body starts with HTML\r",
+							"    pm.expect(responseBody.trim()).to.match(/^<!DOCTYPE html>/);\r",
+							"\r",
+							"    // Example checks for specific HTML content (if needed)\r",
+							"    pm.expect(responseBody).to.include('Expected HTML content or structure');\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/public-apis/public-apis",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"public-apis",
+						"public-apis"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "performance",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/public-apis/public-apis",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"public-apis",
+						"public-apis"
+					],
+					"query": [
+						{
+							"key": "foo1",
+							"value": "bar1",
+							"disabled": true
+						},
+						{
+							"key": "foo2",
+							"value": "bar2",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Smoke test",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is JSON\", function () {\r",
+							"    pm.response.to.have.header('Content-Type', 'application/json; charset=utf-8');\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/public-apis/public-apis",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"public-apis",
+						"public-apis"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "regression 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is HTML\", function () {\r",
+							"    pm.response.to.have.header('Content-Type', 'text/html; charset=utf-8');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body contains expected HTML\", function () {\r",
+							"    var responseBody = pm.response.text();\r",
+							"    pm.expect(responseBody).to.include('<!DOCTYPE html>');\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/public-apis/public-apis",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"public-apis",
+						"public-apis"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "functional",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has correct title\", function () {\r",
+							"    var jsonData = pm.response.text();\r",
+							"    pm.expect(jsonData).to.include(\"GitHub\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"foo\",\r\n  \"body\": \"bar\",\r\n  \"userId\": 1\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/public-apis/public-apis",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"public-apis",
+						"public-apis"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "put request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Verify PUT request\", function () {\r",
+							"    var response = pm.response;\r",
+							"    var responseBody = response.text(); //Fixed syntax\r",
+							"\r",
+							"    // Check status code\r",
+							"    pm.expect(response.code).to.eql(422);\r",
+							"\r",
+							"    // Check Content-Type header\r",
+							"    pm.expect(response.headers.get('Content-Type')).to.include('text/html');\r",
+							"\r",
+							"    // Log response body for debugging\r",
+							"    console.log(\"Response Body: \", responseBody);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Updated Name\",\r\n  \"value\": \"Updated Value\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/public-apis/public-apis",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"public-apis",
+						"public-apis"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "patch request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Verify PATCH request\", function () {\r",
+							"    var response = pm.response;\r",
+							"    var responseBody = response.text(); // Get the response body as text\r",
+							"\r",
+							"    // Log response body for debugging\r",
+							"    console.log(\"Response Body: \", responseBody);\r",
+							"\r",
+							"    // Check status code\r",
+							"    pm.expect(response.code).to.eql(422); // Assuming 422 is the expected status code for a failed PATCH\r",
+							"\r",
+							"    // Check Content-Type header\r",
+							"    pm.expect(response.headers.get('Content-Type')).to.include('text/html');\r",
+							"\r",
+							"    // If the content type is HTML, handle it as an HTML response\r",
+							"    if (response.headers.get('Content-Type').includes('text/html')) {\r",
+							"        pm.test(\"Response is HTML\", function () {\r",
+							"            pm.expect(responseBody).to.include('<html>');\r",
+							"        });\r",
+							"    } else {\r",
+							"        // Log a message for non-HTML response\r",
+							"        console.log(\"Response is not HTML\");\r",
+							"    }\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Updated Name\",\r\n  \"value\": \"Updated Value\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/public-apis/public-apis",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"public-apis",
+						"public-apis"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Verify DELETE request\", function () {\r",
+							"    var response = pm.response;\r",
+							"    var responseBody = response.text(); // Get the response body as text\r",
+							"\r",
+							"    // Log response body for debugging\r",
+							"    console.log(\"Response Body: \", responseBody);\r",
+							"\r",
+							"    // Check status code\r",
+							"    if (response.code === 200) {\r",
+							"        pm.test(\"Status code is 200\", function () {\r",
+							"            pm.expect(response.code).to.eql(200);\r",
+							"        });\r",
+							"\r",
+							"        // Check Content-Type header\r",
+							"        pm.test(\"Content-Type header is application/json\", function () {\r",
+							"            pm.expect(response.headers.get('Content-Type')).to.include('application/json');\r",
+							"        });\r",
+							"\r",
+							"        // Optionally, check that the response body indicates successful deletion\r",
+							"        try {\r",
+							"            var jsonResponse = JSON.parse(responseBody);\r",
+							"\r",
+							"            // Verify response structure and content\r",
+							"            pm.test(\"Response contains success message\", function () {\r",
+							"                pm.expect(jsonResponse).to.have.property('message');\r",
+							"                pm.expect(jsonResponse.message).to.eql(\"Resource deleted successfully\");\r",
+							"            });\r",
+							"\r",
+							"        } catch (e) {\r",
+							"            // Handle JSON parsing error\r",
+							"            console.error(\"Failed to parse JSON response:\", e);\r",
+							"            pm.test(\"Response is not JSON\", function () {\r",
+							"                pm.expect(responseBody).to.include('<html>'); // Check if the response is HTML\r",
+							"            });\r",
+							"        }\r",
+							"\r",
+							"    } else if (response.code === 422) {\r",
+							"        // Handle specific logic for 422 status code\r",
+							"        pm.test(\"Status code is 422\", function () {\r",
+							"            pm.expect(response.code).to.eql(422);\r",
+							"        });\r",
+							"\r",
+							"        // Log additional information\r",
+							"        console.log(\"Response Body for 422 error: \", responseBody);\r",
+							"\r",
+							"        // Optionally, add checks for validation error messages if provided\r",
+							"        try {\r",
+							"            var jsonResponse = JSON.parse(responseBody);\r",
+							"\r",
+							"            // Verify response structure and content\r",
+							"            pm.test(\"Response contains error message\", function () {\r",
+							"                pm.expect(jsonResponse).to.have.property('error');\r",
+							"                pm.expect(jsonResponse.error).to.eql(\"Validation failed\"); // Adjust according to your API's error message\r",
+							"            });\r",
+							"\r",
+							"        } catch (e) {\r",
+							"            // Handle JSON parsing error\r",
+							"            console.error(\"Failed to parse JSON response:\", e);\r",
+							"            pm.test(\"Response is not JSON\", function () {\r",
+							"                pm.expect(responseBody).to.include('<html>'); // Check if the response is HTML\r",
+							"            });\r",
+							"        }\r",
+							"\r",
+							"    } else {\r",
+							"        // Handle other status codes\r",
+							"        pm.test(\"Unexpected status code\", function () {\r",
+							"            pm.expect(response.code).to.be.oneOf([200, 422]);\r",
+							"        });\r",
+							"    }\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/public-apis/public-apis",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"public-apis",
+						"public-apis"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "head request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Verify HEAD request\", function () {\r",
+							"    var response = pm.response;\r",
+							"\r",
+							"    // Check status code\r",
+							"    pm.test(\"Status code is 200\", function () {\r",
+							"        pm.expect(response.code).to.eql(200);\r",
+							"    });\r",
+							"\r",
+							"    // Debug output to check all headers\r",
+							"    console.log(\"Response Headers:\", response.headers.all());\r",
+							"\r",
+							"    // Check Content-Type header\r",
+							"    pm.test(\"Content-Type header is present\", function () {\r",
+							"        pm.expect(response.headers.has('Content-Type')).to.be.true;\r",
+							"    });\r",
+							"\r",
+							"    // Check Content-Length header\r",
+							"    pm.test(\"Content-Length header is present\", function () {\r",
+							"        const contentLength = response.headers.get('Content-Length');\r",
+							"        console.log(\"Content-Length Header:\", contentLength);\r",
+							"        pm.expect(contentLength).to.not.be.undefined;\r",
+							"    });\r",
+							"\r",
+							"    // Optional: Check other headers\r",
+							"    pm.test(\"Custom header is present\", function () {\r",
+							"        const customHeader = response.headers.get('X-Custom-Header');\r",
+							"        console.log(\"X-Custom-Header:\", customHeader);\r",
+							"        pm.expect(customHeader).to.eql('expected-value'); // Adjust according to your API\r",
+							"    });\r",
+							"\r",
+							"    // Optional: Ensure response body is empty for HEAD requests\r",
+							"    pm.test(\"Response body is empty\", function () {\r",
+							"        pm.expect(response.text()).to.eql('');\r",
+							"    });\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "HEAD",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/public-apis/public-apis",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"public-apis",
+						"public-apis"
+					],
+					"query": [
+						{
+							"key": "foo1",
+							"value": "bar1",
+							"disabled": true
+						},
+						{
+							"key": "foo2",
+							"value": "bar2",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "options request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Verify OPTIONS request\", function () {\r",
+							"    var response = pm.response;\r",
+							"\r",
+							"    // Check status code\r",
+							"    pm.test(\"Status code is 200\", function () {\r",
+							"        pm.expect(response.code).to.eql(200);\r",
+							"    });\r",
+							"\r",
+							"    // Check Content-Type header\r",
+							"    pm.test(\"Content-Type header is present\", function () {\r",
+							"        pm.expect(response.headers.has('Content-Type')).to.be.true;\r",
+							"    });\r",
+							"\r",
+							"    // Check Access-Control-Allow-Methods header\r",
+							"    pm.test(\"Access-Control-Allow-Methods header includes 'GET, POST, PUT, DELETE'\", function () {\r",
+							"        const methods = response.headers.get('Access-Control-Allow-Methods');\r",
+							"        console.log(\"Access-Control-Allow-Methods Header:\", methods);\r",
+							"        pm.expect(methods).to.include('GET');\r",
+							"        pm.expect(methods).to.include('POST');\r",
+							"        pm.expect(methods).to.include('PUT');\r",
+							"        pm.expect(methods).to.include('DELETE');\r",
+							"    });\r",
+							"\r",
+							"    // Check Access-Control-Allow-Headers header\r",
+							"    pm.test(\"Access-Control-Allow-Headers header includes 'Content-Type'\", function () {\r",
+							"        const allowedHeaders = response.headers.get('Access-Control-Allow-Headers');\r",
+							"        console.log(\"Access-Control-Allow-Headers Header:\", allowedHeaders);\r",
+							"        pm.expect(allowedHeaders).to.include('Content-Type');\r",
+							"    });\r",
+							"\r",
+							"    // Optional: Check other headers\r",
+							"    pm.test(\"Custom header is present\", function () {\r",
+							"        const customHeader = response.headers.get('X-Custom-Header');\r",
+							"        console.log(\"X-Custom-Header:\", customHeader);\r",
+							"        pm.expect(customHeader).to.eql('expected-value'); // Adjust according to your API\r",
+							"    });\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "OPTIONS",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/public-apis/public-apis",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"public-apis",
+						"public-apis"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "regression 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Check status code\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Check for 422 status code in case of errors\r",
+							"pm.test(\"Status code is 422 when appropriate\", function () {\r",
+							"    pm.response.to.have.status(422);\r",
+							"});\r",
+							"\r",
+							"// Check if response is HTML instead of JSON\r",
+							"pm.test(\"Response is HTML\", function () {\r",
+							"    pm.response.to.have.header('Content-Type', 'text/html; charset=utf-8');\r",
+							"});\r",
+							"\r",
+							"// Handle HTML response\r",
+							"pm.test(\"Response body contains HTML\", function () {\r",
+							"    var responseBody = pm.response.text();\r",
+							"    pm.expect(responseBody).to.include('<!DOCTYPE html>');\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/public-apis/public-apis",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"public-apis",
+						"public-apis"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": " https://github.com",
+			"type": "string"
+		}
+	]
+}
