@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: Run Postman Tests
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - master  # or main, or any other branch you want to monitor
 
 jobs:
-  build-and-test:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,21 +19,14 @@ jobs:
         node-version: '14'  # specify your Node.js version
 
     - name: Install dependencies
-      run: npm install
+      run: npm install -g newman newman-reporter-html
 
-    - name: Run tests
-      run: npm test
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build-and-test
-    if: github.ref == 'refs/heads/master'  # Ensure deployment only on master branch
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Deploy to production
+    - name: Run Postman Collection
       run: |
-        # Add your deployment scripts here
-        echo "Deploying to production..."
+        newman run your-collection.json -r html --reporter-html-export newman-report.html
+
+    - name: Upload Test Report
+      uses: actions/upload-artifact@v3
+      with:
+        name: newman-report
+        path: newman-report.html
